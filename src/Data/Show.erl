@@ -1,6 +1,6 @@
 % module Data.Show
 -module(data_show@foreign).
--export([showIntImpl/1, showNumberImpl/1, showCharImpl/1, showStringImpl/1]).
+-export([showIntImpl/1, showNumberImpl/1, showCharImpl/1, showStringImpl/1, showArrayImpl/1]).
 
 showIntImpl(N) -> integer_to_list(N).
 showNumberImpl(N) -> float_to_list(N).
@@ -35,17 +35,9 @@ showStringImpl(S) ->
   ++ "\""
   .
 
-%
-% showArrayImpl(F) -> fun (XS) ->
-%
-%   end.
-%
-% exports.showArrayImpl = function (f) {
-%   return function (xs) {
-%     var ss = [];
-%     for (var i = 0, l = xs.length; i < l; i++) {
-%       ss[i] = f(xs[i]);
-%     }
-%     return "[" + ss.join(",") + "]";
-%   };
-% };
+showArrayImpl(F) ->
+  fun (XS) ->
+    "[" ++
+    string:join(lists:map(F, array:to_list(XS)), ",") ++
+    "]"
+  end.
