@@ -9,9 +9,9 @@ module Data.Show (class Show, show) where
 class Show a where
   show :: a -> String
 
-instance showBoolean :: Show Boolean where
-  show true = "true"
-  show false = "false"
+-- instance showBoolean :: Show Boolean where
+--   show true = "true"
+--   show false = "false"
 
 instance showInt :: Show Int where
   show = showIntImpl
@@ -25,11 +25,11 @@ instance showChar :: Show Char where
 instance showString :: Show String where
   show = showStringImpl
 
-instance showArray :: Show a => Show (Array a) where
-  show = showArrayImpl show
+-- instance showArray :: Show a => Show (Array a) where
+--   show = showArrayImpl show
 
 foreign import showIntImpl :: Int -> String
 foreign import showNumberImpl :: Number -> String
 foreign import showCharImpl :: Char -> String
 foreign import showStringImpl :: String -> String
-foreign import showArrayImpl :: forall a. (a -> String) -> Array a -> String
+-- foreign import showArrayImpl :: forall a. (a -> String) -> Array a -> String
