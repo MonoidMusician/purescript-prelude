@@ -4,5 +4,5 @@
 
 arrayMap(F) ->
   fun (Arr) ->
-    array:map(F, Arr)
+    array:map(fun (_,X) -> F(X) end, Arr)
   end.
