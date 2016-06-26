@@ -7,8 +7,8 @@ exports.showIntImpl = function (n) {
 };
 
 exports.showNumberImpl = function (n) {
-  /* jshint bitwise: false */
-  return n === (n | 0) ? n + ".0" : n.toString();
+  var str = n.toString();
+  return isNaN(str + ".0") ? str : str + ".0";
 };
 
 exports.showCharImpl = function (c) {
