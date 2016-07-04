@@ -1,22 +1,15 @@
-% module Data.Eq
 -module(data_eq@foreign).
--export([refEq/1, refIneq/1, eqArrayImpl/1]).
--export([eqArrayImpl/3]).
+-export([refEq/2,refIneq/2,eqArrayImpl/3]).
 
-refEq(A) -> fun (B) -> A =:= B end.
-refIneq(A) -> fun (B) -> A =/= B end.
+refEq(A, B) -> A =:= B.
+refIneq(A, B) -> A =/= B.
 
-eqArrayImpl(F, [X|Xs], [Y|Ys]) ->
+eqArrayImpl@1(F, [X|Xs], [Y|Ys]) ->
   case (F(X))(Y) of
     true -> eqArrayImpl(F,Xs,Ys);
     false -> false
   end;
-eqArrayImpl(_, [], []) -> true;
-eqArrayImpl(_, _, _) -> false.
+eqArrayImpl@1(_, [], []) -> true;
+eqArrayImpl@1(_, _, _) -> false.
 
-eqArrayImpl(F) ->
-  fun (Xs) ->
-    fun (Ys) ->
-      eqArrayImpl(F, array:to_list(Xs), array:to_list(Ys))
-    end
-  end.
+eqArrayImpl(F, Xs, Ys) -> eqArrayImpl@1(F, array:to_list(Xs), array:to_list(Ys)).

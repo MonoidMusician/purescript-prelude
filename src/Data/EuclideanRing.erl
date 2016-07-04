@@ -1,8 +1,7 @@
-% module Data.EuclideanRing
 -module(data_euclideanRing@foreign).
--export([intDegree/1, intDiv/1, intMod/1, numDiv/1]).
+-export([intDegree/1, intDiv/2, intMod/2, numDiv/2]).
 
 intDegree(X) -> abs(X).
-intDiv(X) -> fun (Y) -> X div Y end.
-intMod(X) -> fun (Y) -> X rem Y end.
-numDiv(X) -> fun (Y) -> X / Y end.
+intDiv(X, Y) -> X div Y.
+intMod(X, Y) -> X rem Y.
+numDiv(X, Y) -> X / Y.

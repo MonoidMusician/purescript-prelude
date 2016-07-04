@@ -1,6 +1,5 @@
-% module Data.Semigroup
 -module(data_semigroup@foreign).
--export([concatString/1, concatArray/1]).
+-export([concatString/2, concatArray/2]).
 
-concatString(S1) -> fun (S2) -> S1 ++ S2 end.
-concatArray(A1) -> fun (A2) -> A1 ++ A2 end.
+concatString(S1, S2) -> S1 ++ S2.
+concatArray(A1, A2) -> array:from_list(array:to_list(A1) ++ array:to_list(A2)).

@@ -1,6 +1,6 @@
 % module Data.Show
 -module(data_show@foreign).
--export([showIntImpl/1, showNumberImpl/1, showCharImpl/1, showStringImpl/1, showArrayImpl/1]).
+-export([showIntImpl/1, showNumberImpl/1, showCharImpl/1, showStringImpl/1, showArrayImpl/2]).
 
 showIntImpl(N) -> integer_to_list(N).
 showNumberImpl(N) -> float_to_list(N).
@@ -35,9 +35,7 @@ showStringImpl(S) ->
   ++ "\""
   .
 
-showArrayImpl(F) ->
-  fun (XS) ->
-    "[" ++
-    string:join(lists:map(F, array:to_list(XS)), ",") ++
-    "]"
-  end.
+showArrayImpl(F, XS) ->
+  "[" ++
+  string:join(lists:map(F, array:to_list(XS)), ",") ++
+  "]".

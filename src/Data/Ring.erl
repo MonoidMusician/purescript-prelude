@@ -1,6 +1,5 @@
-% module Data.Ring
 -module(data_ring@foreign).
--export([intSub/1, numSub/1]).
+-export([intSub/2, numSub/2]).
 
-intSub(N) -> fun (M) -> N - M end.
-numSub(N) -> fun (M) -> N - M end.
+intSub(N, M) -> N - M.
+numSub(N, M) -> N - M.

@@ -1,9 +1,8 @@
-% module Data.Semiring
 -module(data_semiring@foreign).
--export([intAdd/1, intMul/1, numAdd/1, numMul/1]).
+-export([intAdd/2, intMul/2, numAdd/2, numMul/2]).
 
-intAdd(X) -> fun(Y) -> X + Y end.
-intMul(X) -> fun(Y) -> X * Y end.
+intAdd(X, Y) -> X + Y.
+intMul(X, Y) -> X * Y.
 
-numAdd(X) -> fun(Y) -> X + Y end.
-numMul(X) -> fun(Y) -> X * Y end.
+numAdd(X, Y) -> X + Y.
+numMul(X, Y) -> X * Y.

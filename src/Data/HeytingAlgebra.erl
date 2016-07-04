@@ -1,7 +1,6 @@
-% module Data.HeytingAlgebra
 -module(data_heytingAlgebra@foreign).
--export([boolConj/1, boolDisj/1, boolNot/1]).
+-export([boolConj/2, boolDisj/2, boolNot/1]).
 
-boolConj(A) -> fun (B) -> A and B end.
-boolDisj(A) -> fun (B) -> A or B end.
+boolConj(A, B) -> A and B.
+boolDisj(A, B) -> A or B.
 boolNot(A) -> not A.

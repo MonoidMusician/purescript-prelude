@@ -1,8 +1,5 @@
-% module Data.Functor
 -module(data_functor@foreign).
--export([arrayMap/1]).
+-export([arrayMap/2]).
 
-arrayMap(F) ->
-  fun (Arr) ->
-    array:map(fun (_,X) -> F(X) end, Arr)
-  end.
+arrayMap(F, Arr) ->
+  array:map(fun (_,X) -> F(X) end, Arr).

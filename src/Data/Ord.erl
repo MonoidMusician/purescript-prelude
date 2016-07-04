@@ -1,7 +1,5 @@
-% module Data.Ord
 -module(data_ord@foreign).
 -export([ordArrayImpl/1]).
--export([ordArrayImpl/3]).
 
 ordArrayImpl(F, [X|XS], [Y|YS]) ->
   case (F(X))(Y) of
