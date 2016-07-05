@@ -6,7 +6,7 @@ refIneq(A, B) -> A =/= B.
 
 eqArrayImpl@1(F, [X|Xs], [Y|Ys]) ->
   case (F(X))(Y) of
-    true -> eqArrayImpl(F,Xs,Ys);
+    true -> eqArrayImpl@1(F,Xs,Ys);
     false -> false
   end;
 eqArrayImpl@1(_, [], []) -> true;
