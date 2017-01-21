@@ -1,4 +1,3 @@
-% module Data.Show
 -module(data_show@foreign).
 -export([showIntImpl/1, showNumberImpl/1, showCharImpl/1, showStringImpl/1, showArrayImpl/2]).
 
@@ -18,22 +17,18 @@ showCharImpl(C) ->
   end.
 
 showStringImpl(S) ->
-  "\"" ++
-  lists:flatmap(fun(C) ->
-    case C of
-      $\b -> "\\b";
-      $\f -> "\\f";
-      $\n -> "\\n";
-      $\r -> "\\r";
-      $\t -> "\\t";
-      $\v -> "\\v";
-      N when N < 16#20; N == 16#7F -> "\\" ++ integer_to_list(N);
-      _ when C == $\'; C == $\\ -> "\\" ++ [C];
-      _ -> [C]
-    end
-  end, S)
-  ++ "\""
-  .
+  Replace = fun (C) -> case C of
+    $\b -> <<"\\b"/utf8>>;
+    $\f -> <<"\\f"/utf8>>;
+    $\n -> <<"\\n"/utf8>>;
+    $\r -> <<"\\r"/utf8>>;
+    $\t -> <<"\\t"/utf8>>;
+    $\v -> <<"\\v"/utf8>>;
+    $\' -> <<"\\'"/utf8>>;
+    $\" -> <<"\\\""/utf8>>;
+    _ -> <<C/utf8>>
+  end end,
+  << "\""/utf8, << (Replace(C)) || <<C>> <= S >>/binary, "\""/utf8 >>.
 
 showArrayImpl(F, XS) ->
   "[" ++
