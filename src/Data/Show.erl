@@ -31,6 +31,7 @@ showStringImpl(S) ->
   << "\""/utf8, << (Replace(C)) || <<C>> <= S >>/binary, "\""/utf8 >>.
 
 showArrayImpl(F, XS) ->
+  unicode:characters_to_binary(
   "[" ++
-  string:join(lists:map(F, array:to_list(XS)), ",") ++
-  "]".
+  string:join(lists:map(fun (X) -> unicode:characters_to_list(F(X)) end, array:to_list(XS)), ",") ++
+  "]").
