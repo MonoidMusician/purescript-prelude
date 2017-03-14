@@ -1,8 +1,8 @@
 -module(data_show@foreign).
 -export([showIntImpl/1, showNumberImpl/1, showCharImpl/1, showStringImpl/1, showArrayImpl/2]).
 
-showIntImpl(N) -> integer_to_list(N).
-showNumberImpl(N) -> float_to_list(N).
+showIntImpl(N) -> integer_to_binary(N).
+showNumberImpl(N) -> float_to_binary(N).
 showCharImpl(C) ->
   case C of
     $\b -> "'\\b'";
