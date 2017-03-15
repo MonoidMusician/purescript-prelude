@@ -5,15 +5,15 @@ showIntImpl(N) -> integer_to_binary(N).
 showNumberImpl(N) -> float_to_binary(N).
 showCharImpl(C) ->
   case C of
-    $\b -> "'\\b'";
-    $\f -> "'\\f'";
-    $\n -> "'\\n'";
-    $\r -> "'\\r'";
-    $\t -> "'\\t'";
-    $\v -> "'\\v'";
-    N when N < 16#20; N == 16#7F -> "'\\" ++ integer_to_list(N) ++ "'";
-    C when C == $\'; C == $\\ -> "'\\" ++ [C] ++ "'";
-    C -> [$\', C, $\']
+    $\b -> <<"'\\b'"/utf8>>;
+    $\f -> <<"'\\f'"/utf8>>;
+    $\n -> <<"'\\n'"/utf8>>;
+    $\r -> <<"'\\r'"/utf8>>;
+    $\t -> <<"'\\t'"/utf8>>;
+    $\v -> <<"'\\v'"/utf8>>;
+    N when N < 16#20; N == 16#7F -> <<"'\\"/utf8, N/utf8, "'"/utf8>>;
+    C when C == $\'; C == $\\ -> <<"'\\"/utf8, C/utf8, "'"/utf8>>;
+    C -> <<$\', C/utf8, $\'>>
   end.
 
 showStringImpl(S) ->
