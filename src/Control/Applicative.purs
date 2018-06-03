@@ -25,7 +25,7 @@ import Data.Unit (Unit, unit)
 -- | Instances must satisfy the following laws in addition to the `Apply`
 -- | laws:
 -- |
--- | - Identity: `(pure id) <*> v = v`
+-- | - Identity: `(pure identity) <*> v = v`
 -- | - Composition: `pure (<<<) <*> f <*> g <*> h = f <*> (g <*> h)`
 -- | - Homomorphism: `(pure f) <*> (pure x) = pure (f x)`
 -- | - Interchange: `u <*> (pure y) = (pure (_ $ y)) <*> u`
@@ -53,12 +53,12 @@ instance applicativeArray :: Applicative Array where
 liftA1 :: forall f a b. Applicative f => (a -> b) -> f a -> f b
 liftA1 f a = pure f <*> a
 
--- | Perform a applicative action when a condition is true.
+-- | Perform an applicative action when a condition is true.
 when :: forall m. Applicative m => Boolean -> m Unit -> m Unit
 when true m = m
 when false _ = pure unit
 
--- | Perform a applicative action unless a condition is true.
+-- | Perform an applicative action unless a condition is true.
 unless :: forall m. Applicative m => Boolean -> m Unit -> m Unit
 unless false m = m
 unless true _ = pure unit

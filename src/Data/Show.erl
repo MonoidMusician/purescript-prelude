@@ -1,5 +1,5 @@
 -module(data_show@foreign).
--export([showIntImpl/1, showNumberImpl/1, showCharImpl/1, showStringImpl/1, showArrayImpl/2]).
+-export([showIntImpl/1, showNumberImpl/1, showCharImpl/1, showStringImpl/1, showArrayImpl/2, cons/2, join/2]).
 
 showIntImpl(N) -> integer_to_binary(N).
 showNumberImpl(N) -> float_to_binary(N).
@@ -30,8 +30,12 @@ showStringImpl(S) ->
   end end,
   << "\""/utf8, << (Replace(C)) || <<C>> <= S >>/binary, "\""/utf8 >>.
 
-showArrayImpl(F, XS) ->
-  unicode:characters_to_binary(
-  "[" ++
-  string:join(lists:map(fun (X) -> unicode:characters_to_list(F(X)) end, array:to_list(XS)), ",") ++
-  "]").
+join(Separator, Xs, F) -> unicode:characters_to_binary(
+  lists:join(unicode:characters_to_list(Separator), 
+    lists:map(fun (X) -> unicode:characters_to_list(F(X)) end, array:to_list(Xs)))).
+
+showArrayImpl(F, Xs) ->
+  <<"["/utf8, (join(",", Xs, F)/binary), "]"/utf8>>.
+
+cons(Head, Tail) -> array:from_list([Head|array:to_list(Tail)]).
+join(Separator, Xs) -> join(Separator, Xs, fun (X) -> X end).

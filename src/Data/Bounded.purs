@@ -22,13 +22,6 @@ instance boundedBoolean :: Bounded Boolean where
   top = true
   bottom = false
 
--- instance boundedInt :: Bounded Int where
---   top = topInt
---   bottom = bottomInt
---
--- foreign import topInt :: Int
--- foreign import bottomInt :: Int
-
 -- | Characters fall within the Unicode range.
 instance boundedChar :: Bounded Char where
   top = topChar

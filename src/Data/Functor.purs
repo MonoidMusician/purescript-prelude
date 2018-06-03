@@ -19,7 +19,7 @@ import Data.Unit (Unit, unit)
 -- |
 -- | Instances must satisfy the following laws:
 -- |
--- | - Identity: `map id = id`
+-- | - Identity: `map identity = identity`
 -- | - Composition: `map (f <<< g) = map f <<< map g`
 class Functor f where
   map :: forall a b. (a -> b) -> f a -> f b
@@ -82,7 +82,7 @@ infixl 4 voidLeft as $>
 -- | hasDigit :: String -> Bool
 -- | password :: String
 -- |
--- | validate :: String -> List Bool
+-- | validate :: String -> Array Bool
 -- | validate = flap [longEnough, hasSymbol, hasDigit]
 -- | ```
 -- |

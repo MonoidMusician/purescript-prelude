@@ -1,8 +1,7 @@
 -module(data_eq@foreign).
--export([refEq/2,refIneq/2,eqArrayImpl/3]).
+-export([refEq/2,eqArrayImpl/3]).
 
 refEq(A, B) -> A =:= B.
-refIneq(A, B) -> A =/= B.
 
 eqArrayImpl@1(F, [X|Xs], [Y|Ys]) ->
   case (F(X))(Y) of
