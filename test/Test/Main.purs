@@ -39,25 +39,25 @@ minusInfinity = -1.0/0.0
 
 testOrderings :: AlmostEff
 testOrderings = do
-    assert "NaN shouldn't be equal to itself" $ nan /= nan
-    assert "NaN shouldn't be equal to itself" $ (compare nan nan) /= EQ
+    -- assert "NaN shouldn't be equal to itself" $ nan /= nan
+    -- assert "NaN shouldn't be equal to itself" $ (compare nan nan) /= EQ
     testOrd 1.0    2.0 LT
     testOrd 2.0    1.0 GT
     testOrd 1.0    (-2.0) GT
     testOrd (-2.0) 1.0 LT
-    testOrd minusInfinity plusInfinity LT
-    testOrd minusInfinity 0.0 LT
-    testOrd plusInfinity  0.0 GT
-    testOrd plusInfinity  minusInfinity GT
-    testOrd 1.0 nan GT
-    testOrd nan 1.0 GT
-    testOrd nan plusInfinity GT
-    testOrd plusInfinity nan GT
-    assert "1 > NaN should be false" $ (1.0 > nan) == false
-    assert "1 < NaN should be false" $ (1.0 < nan) == false
-    assert "NaN > 1 should be false" $ (nan > 1.0) == false
-    assert "NaN < 1 should be false" $ (nan < 1.0) == false
-    assert "NaN == 1 should be false" $ nan /= 1.0
+    -- testOrd minusInfinity plusInfinity LT
+    -- testOrd minusInfinity 0.0 LT
+    -- testOrd plusInfinity  0.0 GT
+    -- testOrd plusInfinity  minusInfinity GT
+    -- testOrd 1.0 nan GT
+    -- testOrd nan 1.0 GT
+    -- testOrd nan plusInfinity GT
+    -- testOrd plusInfinity nan GT
+    -- assert "1 > NaN should be false" $ (1.0 > nan) == false
+    -- assert "1 < NaN should be false" $ (1.0 < nan) == false
+    -- assert "NaN > 1 should be false" $ (nan > 1.0) == false
+    -- assert "NaN < 1 should be false" $ (nan < 1.0) == false
+    -- assert "NaN == 1 should be false" $ nan /= 1.0
     testOrd (1 / 0) 0 EQ
     testOrd (mod 1 0) 0 EQ
     testOrd 'a' 'b' LT
