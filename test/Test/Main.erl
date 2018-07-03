@@ -2,4 +2,4 @@
 -export([testNumberShow/1, throwErr/1]).
 
 testNumberShow(_) -> unit.
-throwErr(S) -> fun () -> error(S) end.
+throwErr(S) -> fun (_) -> error(S) end.

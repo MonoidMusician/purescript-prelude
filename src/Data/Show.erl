@@ -35,7 +35,8 @@ join(Separator, Xs, F) -> unicode:characters_to_binary(
     lists:map(fun (X) -> unicode:characters_to_list(F(X)) end, array:to_list(Xs)))).
 
 showArrayImpl(F, Xs) ->
-  <<"["/utf8, (join(",", Xs, F)/binary), "]"/utf8>>.
+  S = join(",", Xs, F),
+  <<"["/utf8, S/binary, "]"/utf8>>.
 
 cons(Head, Tail) -> array:from_list([Head|array:to_list(Tail)]).
 join(Separator, Xs) -> join(Separator, Xs, fun (X) -> X end).
