@@ -4,9 +4,21 @@
 intDegree(X) -> abs(X).
 
 intDiv(_, 0) -> 0;
-intDiv(X, Y) -> X div Y.
+intDiv(X, Y) when Y > 0 -> floor(X / Y);
+intDiv(X, Y) -> -floor(X / -Y).
+
+% Not supported natively until erlang 20
+floor(X) ->
+    T = erlang:trunc(X),
+    case (X - T) of
+        Neg when Neg < 0 -> T - 1;
+        Pos when Pos > 0 -> T;
+        _ -> T
+    end.
 
 intMod(_, 0) -> 0;
-intMod(X, Y) -> (X rem Y + Y) rem Y.
+intMod(X, Y) -> 
+    YY = erlang:abs(Y),
+    (X rem YY + YY) rem YY.
 
 numDiv(X, Y) -> X / Y.
