@@ -4,11 +4,11 @@
 intDegree(X) -> abs(X).
 
 intDiv(_, 0) -> 0;
-intDiv(X, Y) when Y > 0 -> floor(X / Y);
-intDiv(X, Y) -> -floor(X / -Y).
+intDiv(X, Y) when Y > 0 -> floor_(X / Y);
+intDiv(X, Y) -> -floor_(X / -Y).
 
 % Not supported natively until erlang 20
-floor(X) ->
+floor_(X) ->
     T = erlang:trunc(X),
     case (X - T) of
         Neg when Neg < 0 -> T - 1;
