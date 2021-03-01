@@ -3,8 +3,8 @@ module Test.Main where
 import Prelude
 import Data.HeytingAlgebra (ff, tt, implies)
 import Data.Ord (abs)
-
-type AlmostEff = Unit -> Unit
+import Test.Data.Generic.Rep (testGenericRep)
+import Test.Utils (AlmostEff, assert)
 
 main :: AlmostEff
 main = do
@@ -14,13 +14,9 @@ main = do
     testIntDivMod
     testIntDegree
     testRecordInstances
+    testGenericRep
 
 foreign import testNumberShow :: (Number -> String) -> AlmostEff
-foreign import throwErr :: String -> AlmostEff
-
-
-assert :: String -> Boolean -> AlmostEff
-assert msg condition = if condition then const unit else throwErr msg
 
 testOrd :: forall a. Ord a => Show a => a -> a -> Ordering -> AlmostEff
 testOrd x y ord =
@@ -149,4 +145,9 @@ testRecordInstances = do
   testOrd { a: 42, b: "hello" } { a: 42, b: "hello" } EQ
   testOrd { a: 42, b: "hell" } { a: 42, b: "hello" } LT
   testOrd { a: 42, b: "hello" } { a: 42, b: "hell" } GT
-
+  assert "Record bottom" $
+    (bottom :: { a :: Boolean }).a
+    == bottom
+  assert "Record top" $
+    (top :: { a :: Boolean }).a
+    == top

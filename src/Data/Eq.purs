@@ -5,13 +5,13 @@ module Data.Eq
   ) where
 
 import Data.HeytingAlgebra ((&&))
-import Data.Symbol (class IsSymbol, SProxy(..), reflectSymbol)
+import Data.Symbol (class IsSymbol, reflectSymbol)
 import Data.Unit (Unit)
 import Data.Void (Void)
 import Prim.Row as Row
 import Prim.RowList as RL
 import Record.Unsafe (unsafeGet)
-import Type.Data.RowList (RLProxy(..))
+import Type.Proxy (Proxy(..), Proxy2, Proxy3)
 
 -- | The `Eq` type class represents types which support decidable equality.
 -- |
@@ -38,19 +38,19 @@ notEq x y = (x == y) == false
 infix 4 notEq as /=
 
 instance eqBoolean :: Eq Boolean where
-  eq = refEq
+  eq = eqBooleanImpl
 
 instance eqInt :: Eq Int where
-  eq = refEq
+  eq = eqIntImpl
 
 instance eqNumber :: Eq Number where
-  eq = refEq
+  eq = eqNumberImpl
 
 instance eqChar :: Eq Char where
-  eq = refEq
+  eq = eqCharImpl
 
 instance eqString :: Eq String where
-  eq = refEq
+  eq = eqStringImpl
 
 instance eqUnit :: Eq Unit where
   eq _ _ = true
@@ -62,9 +62,23 @@ instance eqArray :: Eq a => Eq (Array a) where
   eq = eqArrayImpl eq
 
 instance eqRec :: (RL.RowToList row list, EqRecord list row) => Eq (Record row) where
-  eq = eqRecord (RLProxy :: RLProxy list)
+  eq = eqRecord (Proxy :: Proxy list)
 
-foreign import refEq :: forall a. a -> a -> Boolean
+instance eqProxy :: Eq (Proxy a) where
+  eq _ _ = true
+
+instance eqProxy2 :: Eq (Proxy2 a) where
+  eq _ _ = true
+
+instance eqProxy3 :: Eq (Proxy3 a) where
+  eq _ _ = true
+
+foreign import eqBooleanImpl :: Boolean -> Boolean -> Boolean
+foreign import eqIntImpl :: Int -> Int -> Boolean
+foreign import eqNumberImpl :: Number -> Number -> Boolean
+foreign import eqCharImpl :: Char -> Char -> Boolean
+foreign import eqStringImpl :: String -> String -> Boolean
+
 foreign import eqArrayImpl :: forall a. (a -> a -> Boolean) -> Array a -> Array a -> Boolean
 
 -- | The `Eq1` type class represents type constructors with decidable equality.
@@ -79,8 +93,9 @@ notEq1 x y = (x `eq1` y) == false
 
 -- | A class for records where all fields have `Eq` instances, used to implement
 -- | the `Eq` instance for records.
+class EqRecord :: RL.RowList Type -> Row Type -> Constraint
 class EqRecord rowlist row where
-  eqRecord :: RLProxy rowlist -> Record row -> Record row -> Boolean
+  eqRecord :: forall rlproxy. rlproxy rowlist -> Record row -> Record row -> Boolean
 
 instance eqRowNil :: EqRecord RL.Nil row where
   eqRecord _ _ _ = true
@@ -94,6 +109,6 @@ instance eqRowCons
     => EqRecord (RL.Cons key focus rowlistTail) row where
   eqRecord _ ra rb = (get ra == get rb) && tail
     where
-      key = reflectSymbol (SProxy :: SProxy key)
+      key = reflectSymbol (Proxy :: Proxy key)
       get = unsafeGet key :: Record row -> focus
-      tail = eqRecord (RLProxy :: RLProxy rowlistTail) ra rb
+      tail = eqRecord (Proxy :: Proxy rowlistTail) ra rb

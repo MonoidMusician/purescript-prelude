@@ -9,8 +9,9 @@ import Prelude
 -- |
 -- | ``` purescript
 -- | Endo f <> Endo g == Endo (f <<< g)
--- | mempty :: Endo _ == Endo identity
+-- | (mempty :: Endo _) == Endo identity
 -- | ```
+newtype Endo :: forall k. (k -> k -> Type) -> k -> Type
 newtype Endo c a = Endo (c a a)
 
 derive newtype instance eqEndo :: Eq (c a a) => Eq (Endo c a)

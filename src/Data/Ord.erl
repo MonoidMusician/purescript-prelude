@@ -1,5 +1,19 @@
 -module(data_ord@foreign).
--export([ordArrayImpl/1]).
+-export([ordBooleanImpl/5, ordIntImpl/5, ordNumberImpl/5, ordStringImpl/5, ordCharImpl/5, ordArrayImpl/1]).
+
+unsafeCompareImpl(LT, EQ, GT, X, Y) ->
+  if
+    X < Y -> LT;
+    X > Y -> GT;
+    true  -> EQ
+  end.
+
+ordBooleanImpl(LT, EQ, GT, X, Y) -> unsafeCompareImpl(LT, EQ, GT, X, Y).
+ordIntImpl(LT, EQ, GT, X, Y) -> unsafeCompareImpl(LT, EQ, GT, X, Y).
+ordNumberImpl(LT, EQ, GT, X, Y) -> unsafeCompareImpl(LT, EQ, GT, X, Y).
+ordStringImpl(LT, EQ, GT, X, Y) -> unsafeCompareImpl(LT, EQ, GT, X, Y).
+ordCharImpl(LT, EQ, GT, X, Y) -> unsafeCompareImpl(LT, EQ, GT, X, Y).
+
 
 ordArrayImpl(F, [X|XS], [Y|YS]) ->
   case (F(X))(Y) of

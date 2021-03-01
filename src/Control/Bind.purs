@@ -18,6 +18,7 @@ import Control.Category (identity)
 import Data.Function (flip)
 import Data.Functor (class Functor, map, void, ($>), (<#>), (<$), (<$>))
 import Data.Unit (Unit)
+import Type.Proxy (Proxy(..), Proxy2, Proxy3)
 
 -- | The `Bind` type class extends the [`Apply`](#apply) type class with a
 -- | "bind" operation `(>>=)` which composes computations in sequence, using
@@ -32,10 +33,11 @@ import Data.Unit (Unit)
 -- |
 -- | where the function argument of `f` is given the name `y`.
 -- |
--- | Instances must satisfy the following law in addition to the `Apply`
+-- | Instances must satisfy the following laws in addition to the `Apply`
 -- | laws:
 -- |
 -- | - Associativity: `(x >>= f) >>= g = x >>= (\k -> f k >>= g)`
+-- | - Apply Superclass: `apply f x = f >>= \f’ -> map f’ x`
 -- |
 -- | Associativity tells us that we can regroup operations which use `do`
 -- | notation so that we can unambiguously write, for example:
@@ -63,10 +65,33 @@ infixr 1 bindFlipped as =<<
 instance bindFn :: Bind ((->) r) where
   bind m f x = f (m x) x
 
+-- | The `bind`/`>>=` function for `Array` works by applying a function to
+-- | each element in the array, and flattening the results into a single,
+-- | new array.
+-- |
+-- | Array's `bind`/`>>=` works like a nested for loop. Each `bind` adds
+-- | another level of nesting in the loop. For example:
+-- | ```
+-- | foo :: Array String
+-- | foo =
+-- |   ["a", "b"] >>= \eachElementInArray1 ->
+-- |     ["c", "d"] >>= \eachElementInArray2
+-- |       pure (eachElementInArray1 <> eachElementInArray2)
+-- |
+-- | -- In other words...
+-- | foo
+-- | -- ... is the same as...
+-- | [ ("a" <> "c"), ("a" <> "d"), ("b" <> "c"), ("b" <> "d") ]
+-- | -- which simplifies to...
+-- | [ "ac", "ad", "bc", "bd" ]
+-- | ```
 instance bindArray :: Bind Array where
   bind = arrayBind
 
 foreign import arrayBind :: forall a b. Array a -> (a -> Array b) -> Array b
+
+instance bindProxy :: Bind Proxy where
+  bind _ _ = Proxy
 
 -- | A class for types whose values can safely be discarded
 -- | in a `do` notation block.
@@ -77,6 +102,15 @@ class Discard a where
   discard :: forall f b. Bind f => f a -> (a -> f b) -> f b
 
 instance discardUnit :: Discard Unit where
+  discard = bind
+
+instance discardProxy :: Discard (Proxy a) where
+  discard = bind
+
+instance discardProxy2 :: Discard (Proxy2 a) where
+  discard = bind
+
+instance discardProxy3 :: Discard (Proxy3 a) where
   discard = bind
 
 -- | Collapse two applications of a monadic type constructor into one.

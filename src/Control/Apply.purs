@@ -9,6 +9,7 @@ module Control.Apply
 import Data.Functor (class Functor, map, void, ($>), (<#>), (<$), (<$>))
 import Data.Function (const)
 import Control.Category (identity)
+import Type.Proxy (Proxy(..))
 
 -- | The `Apply` class provides the `(<*>)` which is used to apply a function
 -- | to an argument under a type constructor.
@@ -25,6 +26,15 @@ import Control.Category (identity)
 -- | `(<*>)` is recovered from `lift2` as `lift2 ($)`. That is, `(<*>)` lifts
 -- | the function application operator `($)` to arguments wrapped with the
 -- | type constructor `f`.
+-- |
+-- | Put differently...
+-- | ```
+-- | foo =
+-- |   functionTakingNArguments <$> computationProducingArg1
+-- |                            <*> computationProducingArg2
+-- |                            <*> ...
+-- |                            <*> computationProducingArgN
+-- | ```
 -- |
 -- | Instances must satisfy the following law in addition to the `Functor`
 -- | laws:
@@ -45,6 +55,9 @@ instance applyArray :: Apply Array where
 
 foreign import arrayApply :: forall a b. Array (a -> b) -> Array a -> Array b
 
+instance applyProxy :: Apply Proxy where
+  apply _ _ = Proxy
+
 -- | Combine two effectful actions, keeping only the result of the first.
 applyFirst :: forall a b f. Apply f => f a -> f b -> f a
 applyFirst a b = const <$> a <*> b
@@ -59,6 +72,12 @@ infixl 4 applySecond as *>
 
 -- | Lift a function of two arguments to a function which accepts and returns
 -- | values wrapped with the type constructor `f`.
+-- |
+-- | ```purescript
+-- | lift2 add (Just 1) (Just 2) == Just 3
+-- | lift2 add Nothing (Just 2) == Nothing
+-- |```
+-- |
 lift2 :: forall a b c f. Apply f => (a -> b -> c) -> f a -> f b -> f c
 lift2 f a b = f <$> a <*> b
 
